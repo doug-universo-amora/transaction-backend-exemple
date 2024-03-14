@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Services\UserService;
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -20,11 +22,11 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
         try {
-            $already = User::where('email', $request->get('email'))->orWhere('document', $request->get('document'))->get()->first();
-            if(!$already) {
+            $userAlready = UserService::alreadyEmailOrDocument($request->get('email'),$request->get('document'));
+            if(!$userAlready) {
                 return User::create($request->all());
             }
             return response()->json([
@@ -60,7 +62,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserUpdateRequest $request, int $id)
     {
         try {
             $user = User::where('id', $id)->get()->first();
@@ -68,9 +70,9 @@ class UserController extends Controller
                 return response()->json([
                     'message' => 'User not found'
                 ], 404);
-            }            
-            $already = User::where('email', $request->get('email'))->orWhere('document', $request->get('document'))->get()->first();
-            if($already && $already->id != $id) {
+            }
+            $userAlready = UserService::alreadyEmailOrDocument($request->get('email'),$request->get('document'), $id);
+            if($userAlready) {
                 return response()->json([
                     'message' => 'Email or Document already'
                 ], 403);

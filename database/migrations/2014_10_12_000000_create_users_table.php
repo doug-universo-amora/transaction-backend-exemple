@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('document')->unique();
             $table->string('email')->unique();
+            $table->float('balance',11, 2)->default(0);
             $table->string('password');
             $table->tinyInteger("type");
             $table->rememberToken();

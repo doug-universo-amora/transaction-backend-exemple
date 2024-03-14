@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('transaction', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('payer');
-            $table->string('payee')->unique();
-            $table->string('value')->unique();
-            $table->rememberToken();
+            $table->integer('payer');
+            $table->integer('payee');
+            $table->float('value',11, 2);
             $table->timestamps();
         });
     }

@@ -7,26 +7,20 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UserStoreRequest extends FormRequest
+class TransactionStoreRequest extends FormRequest
 {
     public function rules()
     {
         return [
-            'name'     => [
+            'payee'     => [
                 'required',
             ],
-            'email'    => [
+            'payer'    => [
                 'required',
             ],
-            'password' => [
+            'value' => [
                 'required',
-            ],
-            'type'  => [
-                'required',
-            ],
-            'document'    => [
-                'required'
-            ],
+            ]
         ];
     }
 
