@@ -16,6 +16,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        if (!$users) {
+            return response()->json()->setStatusCode(204);
+        }
         return $users;
     }
 

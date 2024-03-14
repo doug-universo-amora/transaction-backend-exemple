@@ -8,15 +8,28 @@ use App\Models\User;
 use App\Services\TransactionService;
 use App\Http\Requests\TransactionStoreRequest;
 
-
 class TransactionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
+     /**
+     * @OA\Get(
+     *     path="/index",
+     *     description="Return list transaction",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Missing Data"
+     *     )
+     * )
      */
     public function index()
     {
         $transaction = Transaction::all();
+        if ($transaction) {
+            return response()->json()->setStatusCode(204);
+        }
         return $transaction;
     }
 

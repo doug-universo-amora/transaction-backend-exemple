@@ -1,0 +1,23 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Transaction",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/transaction": {
+            "get": {
+                "summary": "Delete notification by ID.",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        }
+    }
+}
