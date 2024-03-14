@@ -6,14 +6,19 @@ use App\Models\User;
 
 class UserService {
 
-    public const MAKETRANSACTION = [
-        1,
-    ];
+    /**
+     * Verify user can make transaction
+     *
+     * @param App\Models\User
+     */
+    static public function makeTransaction(User $user)
+    {
+        return $user->type == 1 ? true : false;
+    }
 
     /**
      * Verify email or document user exists. Option ignored $id param if not null
-     *
-     * @param App\Models\User
+     * 
      */
     static public function alreadyEmailOrDocument(string $email, int $document, int $id = null)
     {

@@ -26,12 +26,12 @@ class UserController extends Controller
     {
         try {
             $userAlready = UserService::alreadyEmailOrDocument($request->get('email'),$request->get('document'));
-            if(!$userAlready) {
-                return User::create($request->all());
+            if($userAlready) {
+                return response()->json([
+                    'message' => 'User already'
+                ], 409);
             }
-            return response()->json([
-                'message' => 'User already'
-            ], 403);
+            return response()->json(User::create($request->all()), 201);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
@@ -75,10 +75,10 @@ class UserController extends Controller
             if($userAlready) {
                 return response()->json([
                     'message' => 'Email or Document already'
-                ], 403);
+                ], 409);
             }            
             $user->update($request->all());
-            return $user;
+            return response()->json($user, 201);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()

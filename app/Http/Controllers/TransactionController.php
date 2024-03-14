@@ -39,6 +39,11 @@ class TransactionController extends Controller
                     'message' => 'Payer not found'
                 ], 404);
             }
+            if($alreadyPayer->id == $request->get('payee')) {
+                return response()->json([
+                    'message' => 'Payer not send transaction yourself'
+                ], 400);
+            }
 
             return TransactionService::handle($request->all());
         } catch (\Throwable $th) {
@@ -79,9 +84,8 @@ class TransactionController extends Controller
                 return response()->json([
                     'message' => 'Transaction not found'
                 ], 404);
-            } 
-            $transaction->update($request->all());
-            return $transaction;
+            }
+            return TransactionService::handle($request->all(), $id);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
