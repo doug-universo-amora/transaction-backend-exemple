@@ -46,6 +46,9 @@
                     "404": {
                         "description": "Transaction(s) not found"
                     },
+                    "403": {
+                        "description": "Bad Request"
+                    },
                     "400": {
                         "description": "Bad request"
                     },
@@ -111,6 +114,9 @@
                     },
                     "404": {
                         "description": "Transaction(s) not found"
+                    },
+                    "403": {
+                        "description": "Bad Request"
                     },
                     "400": {
                         "description": "Bad request"

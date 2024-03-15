@@ -65,6 +65,10 @@ class TransactionController extends Controller
      *          description="Transaction(s) not found"
      *      ),
      *      @OA\Response(
+     *          response=403,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
      *          response=400,
      *          description="Bad request"
      *      ),
@@ -169,6 +173,10 @@ class TransactionController extends Controller
      *      @OA\Response(
      *          response=404,
      *          description="Transaction(s) not found"
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Bad Request"
      *      ),
      *      @OA\Response(
      *          response=400,
