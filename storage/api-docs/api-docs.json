@@ -5,16 +5,142 @@
         "version": "0.1"
     },
     "paths": {
-        "/api/transaction": {
+        "/transaction-backend-exemple/public/api/transaction": {
             "get": {
-                "summary": "Delete notification by ID.",
-                "operationId": "index",
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Get list of transaction",
+                "description": "Returns list of transaction",
+                "operationId": "63c8786026df638efc415ae8364b5229",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Transaction(s) not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Create a transaction",
+                "description": "Create a transaction",
+                "operationId": "170d1a85a011285db48279a1ae35968b",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Transaction(s) not found"
                     },
                     "400": {
-                        "description": "Bad Request"
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/transaction-backend-exemple/public/api/transaction/{id}": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Get a transaction",
+                "description": "Get a transaction",
+                "operationId": "8b79d75df0c3aeb6776c084dc96e54c8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Get a transaction",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Transaction(s) not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Update a transaction",
+                "description": "Update a transaction",
+                "operationId": "e12f05d1d52aa3cf65e3cf3c5baac1de",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id to update transaction",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Transaction(s) not found"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Delete a transaction",
+                "description": "Delete a transaction",
+                "operationId": "91c0ee680eb325898aebb852e04bdf69",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id to delete transaction",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }

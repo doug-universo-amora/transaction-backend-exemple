@@ -12,29 +12,67 @@ class TransactionController extends Controller
 {
      /**
      * @OA\Get(
-     *     path="/index",
-     *     description="Return list transaction",
-     *     @OA\Response(
-     *         response=200,
-     *         description="OK",
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Missing Data"
+     *      path="/transaction-backend-exemple/public/api/transaction",
+     *      tags={"Transaction"},
+     *      summary="Get list of transaction",
+     *      description="Returns list of transaction",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Transaction(s) not found"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal server error"
+     *      )
      *     )
-     * )
      */
     public function index()
     {
-        $transaction = Transaction::all();
-        if ($transaction) {
-            return response()->json()->setStatusCode(204);
+        try {
+            $transaction = Transaction::all();
+            if (!$transaction) {
+                return response()->json([
+                    'message' => 'Transaction(s) not found'
+                ], 404);
+            }
+            return $transaction;
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => $th->getMessage()
+            ], 500);
         }
-        return $transaction;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *      path="/transaction-backend-exemple/public/api/transaction",
+     *      tags={"Transaction"},
+     *      summary="Create a transaction",
+     *      description="Create a transaction",
+     *      @OA\RequestBody(
+     *      @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation"
+     *       ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Transaction(s) not found"
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal server error"
+     *      )
+     *     )
      */
     public function store(TransactionStoreRequest $request)
     {
@@ -67,7 +105,30 @@ class TransactionController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *      path="/transaction-backend-exemple/public/api/transaction/{id}",
+     *      tags={"Transaction"},
+     *      summary="Get a transaction",
+     *      description="Get a transaction",
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Get a transaction",
+     *         required=true,
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation"
+     *       ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Transaction(s) not found"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal server error"
+     *      )
+     *     )
      */
     public function show(string $id)
     {
@@ -87,7 +148,37 @@ class TransactionController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *      path="/transaction-backend-exemple/public/api/transaction/{id}",
+     *      tags={"Transaction"},
+     *      summary="Update a transaction",
+     *      description="Update a transaction",
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id to update transaction",
+     *         required=true,
+     *      ),
+     *      @OA\RequestBody(
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation"
+     *       ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Transaction(s) not found"
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal server error"
+     *      )
+     *     )
      */
     public function update(TransactionStoreRequest $request, string $id)
     {
@@ -107,7 +198,26 @@ class TransactionController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *      path="/transaction-backend-exemple/public/api/transaction/{id}",
+     *      tags={"Transaction"},
+     *      summary="Delete a transaction",
+     *      description="Delete a transaction",
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id to delete transaction",
+     *         required=true,
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation"
+     *       ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal server error"
+     *      )
+     *     )
      */
     public function destroy(string $id)
     {

@@ -17,7 +17,9 @@ class UserController extends Controller
     {
         $users = User::all();
         if (!$users) {
-            return response()->json()->setStatusCode(204);
+            return response()->json([
+                'message' => 'User(s) not found'
+            ], 404);
         }
         return $users;
     }
@@ -52,7 +54,7 @@ class UserController extends Controller
             if(!$user) {
                 return response()->json([
                     'message' => 'User not found'
-                ], 404);
+                ], 204);
             }
             return $user;
         } catch (\Throwable $th) {
