@@ -4,14 +4,15 @@ namespace App\Services;
 
 use App\Models\User;
 
-class UserService {
+class UserService
+{
 
     /**
      * Verify user can make transaction
      *
      * @param App\Models\User
      */
-    static public function makeTransaction(User $user)
+    public static function makeTransaction(User $user)
     {
         return $user->type == 1 ? true : false;
     }
@@ -20,7 +21,7 @@ class UserService {
      * Verify email or document user exists. Option ignored $id param if not null
      * 
      */
-    static public function alreadyEmailOrDocument(string $email, int $document, int $id = null)
+    public static function alreadyEmailOrDocument(string $email, int $document, int $id = null)
     {
         try {
             $where = User::where('email', $email)->orWhere('document', $document);
@@ -33,8 +34,7 @@ class UserService {
             }
 
             $userAlready = $where->get()->first();
-            return $userAlready ? true : false;
-            
+            return $userAlready ? true : false;            
         } catch (\Throwable $th) {
             throw $th;
         }

@@ -6,14 +6,15 @@ use App\Models\User;
 use App\Services\UserService;
 use App\Services\NotifyService;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
 
-class TransactionService {
-
-    static public function handle(array $arrData, int $id = null)
+class TransactionService
+{
+    public static function handle(array $arrData, int $id = null)
     {
         try {
             $userPayer = User::where('id', $arrData['payer'])->get()->first();
-            if(!UserService::makeTransaction($userPayer)) {
+            if (!UserService::makeTransaction($userPayer)) {
                 return response()->json([
                     'message' => 'Payer can not transaction'
                 ], 400);
@@ -27,18 +28,18 @@ class TransactionService {
 
             $userPayee = User::where('id', $arrData['payee'])->get()->first();
             
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             $transaction = self::execute($userPayer, $userPayee, $arrData, $id);
             
             if (!self::authorization()) {
-                \DB::rollBack();
+                DB::rollBack();
                 return response()->json([
                     'message' => 'Not authorized transaction'
                 ], 403);
             }
 
-            \DB::commit();
+            DB::commit();
             
             NotifyService::send();
 
@@ -47,11 +48,10 @@ class TransactionService {
         } catch (\Throwable $th) {
             throw $th;
         }
-
     }
 
-    static private function execute($userPayer, $userPayee, $arrData, int $id = null)
-    {  
+    private static function execute($userPayer, $userPayee, $arrData, int $id = null)
+    {
         try {
             if (is_null($id)) {
                 $transaction = Transaction::create($arrData);
@@ -70,10 +70,10 @@ class TransactionService {
             return $transaction;
         } catch (\Throwable $th) {
             throw $th;
-        }      
+        }
     }
 
-    static private function authorization()
+    private static function authorization()
     {
         try {
             $json = file_get_contents('https://run.mocky.io/v3/5794d450-d2e2-4412-8131-73d0293ac1cc');
@@ -83,5 +83,4 @@ class TransactionService {
             throw $th;
         }
     }
-
 }

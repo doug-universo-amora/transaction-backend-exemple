@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
@@ -65,10 +64,6 @@ class TransactionController extends Controller
      *          description="Transaction(s) not found"
      *      ),
      *      @OA\Response(
-     *          response=403,
-     *          description="Bad Request"
-     *      ),
-     *      @OA\Response(
      *          response=400,
      *          description="Bad request"
      *      ),
@@ -82,19 +77,19 @@ class TransactionController extends Controller
     {
         try {
             $alreadyPayee = User::where('id', $request->get('payee'))->get()->first();
-            if(!$alreadyPayee) {
+            if (!$alreadyPayee) {
                 return response()->json([
                     'message' => 'Payee not found'
                 ], 404);
             }
 
             $alreadyPayer = User::where('id', $request->get('payer'))->get()->first();
-            if(!$alreadyPayer) {
+            if (!$alreadyPayer) {
                 return response()->json([
                     'message' => 'Payer not found'
                 ], 404);
             }
-            if($alreadyPayer->id == $request->get('payee')) {
+            if ($alreadyPayer->id == $request->get('payee')) {
                 return response()->json([
                     'message' => 'Payer not send transaction yourself'
                 ], 400);
@@ -138,7 +133,7 @@ class TransactionController extends Controller
     {
         try {
             $transaction = Transaction::where('id', $id)->get()->first();
-            if(!$transaction) {
+            if (!$transaction) {
                 return response()->json([
                     'message' => 'Transaction not found'
                 ], 404);
@@ -175,10 +170,6 @@ class TransactionController extends Controller
      *          description="Transaction(s) not found"
      *      ),
      *      @OA\Response(
-     *          response=403,
-     *          description="Bad Request"
-     *      ),
-     *      @OA\Response(
      *          response=400,
      *          description="Bad request"
      *      ),
@@ -192,7 +183,7 @@ class TransactionController extends Controller
     {
         try {
             $transaction = Transaction::where('id', $id)->get()->first();
-            if(!$transaction) {
+            if (!$transaction) {
                 return response()->json([
                     'message' => 'Transaction not found'
                 ], 404);
