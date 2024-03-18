@@ -59,11 +59,11 @@ class TransactionService
                 $transaction = Transaction::where('id', $id)->get()->first();
                 $currentUserPayer = User::where('id', $transaction->payer)->get()->first();
                 $currentUserPayee = User::where('id', $transaction->payee)->get()->first();
-                $currentUserPayer->balance += $transaction->value;
-                $currentUserPayee->balance -= $transaction->value;
+                $balancePayer = $currentUserPayer->balance+$transaction->value;
+                $balancePayee = $currentUserPayee->balance-$transaction->value;
             }
-            $userPayer->balance -= $arrData['value'];
-            $userPayee->balance += $arrData['value'];
+            $userPayer->balance = isset($balancePayer) ? $balancePayer : $arrData['value'];
+            $userPayee->balance = isset($balancePayee) ? $balancePayee : $arrData['value'];
     
             $userPayer->save();
             $userPayee->save();
