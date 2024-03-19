@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use App\Models\User;
 use App\Services\UserService;
 use App\Http\Requests\UserStoreRequest;
@@ -35,7 +36,7 @@ class UserController extends Controller
         if (!$users) {
             return response()->json([
                 'message' => 'User(s) not found'
-            ], 404);
+            ], Response::HTTP_NOT_FOUND);
         }
         return $users;
     }
@@ -78,13 +79,13 @@ class UserController extends Controller
             if ($userAlready) {
                 return response()->json([
                     'message' => 'User already'
-                ], 409);
+                ], Response::HTTP_CONFLICT);
             }
-            return response()->json(User::create($request->all()), 201);
+            return response()->json(User::create($request->all()), Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -121,13 +122,13 @@ class UserController extends Controller
             if (!$user) {
                 return response()->json([
                     'message' => 'User not found'
-                ], 204);
+                ], Response::HTTP_NOT_FOUND);
             }
             return $user;
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -175,20 +176,20 @@ class UserController extends Controller
             if (!$user) {
                 return response()->json([
                     'message' => 'User not found'
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             $userAlready = UserService::alreadyEmailOrDocument($request->get('email'), $request->get('document'), $id);
             if ($userAlready) {
                 return response()->json([
                     'message' => 'Email or Document already'
-                ], 409);
+                ], Response::HTTP_CONFLICT);
             }
             $user->update($request->all());
-            return response()->json($user, 201);
+            return response()->json($user, Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -224,13 +225,13 @@ class UserController extends Controller
             if (!$id) {
                 return response()->json([
                     'message' => 'Bad request'
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             return User::where('id', $id)->delete();
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

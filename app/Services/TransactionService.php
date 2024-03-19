@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Response;
 use App\Models\User;
 use App\Services\UserService;
 use App\Services\NotifyService;
@@ -17,13 +18,13 @@ class TransactionService
             if (!UserService::makeTransaction($userPayer)) {
                 return response()->json([
                     'message' => 'Payer can not transaction'
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             if ($userPayer->balance < $arrData['value']) {
                 return response()->json([
                     'message' => 'Payer not sufficient balance'
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             $userPayee = User::where('id', $arrData['payee'])->get()->first();
@@ -36,14 +37,14 @@ class TransactionService
                 DB::rollBack();
                 return response()->json([
                     'message' => 'Not authorized transaction'
-                ], 403);
+                ], Response::HTTP_FORBIDDEN);
             }
 
             DB::commit();
             
             NotifyService::send();
 
-            return response()->json($transaction, 201);
+            return response()->json($transaction, Response::HTTP_CREATED);
 
         } catch (\Throwable $th) {
             throw $th;

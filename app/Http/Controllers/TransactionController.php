@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
@@ -36,13 +37,13 @@ class TransactionController extends Controller
             if (!$transaction) {
                 return response()->json([
                     'message' => 'Transaction(s) not found'
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             return $transaction;
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -80,26 +81,26 @@ class TransactionController extends Controller
             if (!$alreadyPayee) {
                 return response()->json([
                     'message' => 'Payee not found'
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
 
             $alreadyPayer = User::where('id', $request->get('payer'))->get()->first();
             if (!$alreadyPayer) {
                 return response()->json([
                     'message' => 'Payer not found'
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             if ($alreadyPayer->id == $request->get('payee')) {
                 return response()->json([
                     'message' => 'Payer not send transaction yourself'
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             return TransactionService::handle($request->all());
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -136,13 +137,13 @@ class TransactionController extends Controller
             if (!$transaction) {
                 return response()->json([
                     'message' => 'Transaction not found'
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             return $transaction;
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -186,13 +187,13 @@ class TransactionController extends Controller
             if (!$transaction) {
                 return response()->json([
                     'message' => 'Transaction not found'
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             return TransactionService::handle($request->all(), $id);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -225,7 +226,7 @@ class TransactionController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
